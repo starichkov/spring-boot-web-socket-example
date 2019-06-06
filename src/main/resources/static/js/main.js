@@ -7,6 +7,7 @@ window.onload = function () {
 
 var stompClient = null;
 var alertsArea = null;
+var alertTemplate = null;
 
 function connect() {
     var socket = new SockJS('/ws');
@@ -14,6 +15,7 @@ function connect() {
     stompClient.connect({}, onConnected, onError);
 
     alertsArea = document.querySelector('#alerts-area');
+    alertTemplate = document.querySelector('#alert-template')
 }
 
 function onConnected() {
@@ -45,29 +47,13 @@ function createErrorAlert(alert_message) {
 }
 
 function createAlert(alert_class, alert_message) {
-    var alert = document.createElement('div');
-    alert.classList.add('alert', 'alert-' + alert_class, 'alert-dismissible', 'fade', 'show');
-    alert.setAttribute('role', 'alert');
+    var alertFragment = document.importNode(alertTemplate.content, true);
+    var alert = alertFragment.firstElementChild;
+    alert.classList.add('alert-' + alert_class);
     alert.appendChild(createAlertTextNode(alert_message));
-    alert.appendChild(createAlertCloseButton());
     return alert;
 }
 
 function createAlertTextNode(text) {
     return document.createTextNode(text);
-}
-
-function createAlertCloseButton() {
-    var alertClose = document.createElement('button');
-    alertClose.classList.add('close');
-    alertClose.setAttribute('type', 'button');
-    alertClose.setAttribute('data-dismiss', 'alert');
-    alertClose.setAttribute('aria-label', 'Close');
-
-    var span = document.createElement('span');
-    span.setAttribute('aria-hidden', 'true');
-    span.innerHTML = '&times;';
-
-    alertClose.appendChild(span);
-    return alertClose;
 }
