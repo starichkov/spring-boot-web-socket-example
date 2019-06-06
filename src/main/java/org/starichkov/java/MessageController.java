@@ -25,7 +25,7 @@ public class MessageController {
 
     @GetMapping(value = "/new", produces = MediaType.TEXT_PLAIN_VALUE)
     public void sendNewMessageReceivedEvent(@RequestParam String message) {
-        simpMessageSendingOperations.convertAndSend("/topics/new", message);
+        simpMessageSendingOperations.convertAndSend("/topics/new", new Message(message));
     }
 
     @GetMapping(value = "/error", produces = MediaType.TEXT_PLAIN_VALUE)

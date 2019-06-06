@@ -9,13 +9,19 @@ var stompClient = null;
 var alertsArea = null;
 var alertTemplate = null;
 
+var messageArea = null;
+var messageTemplate = null;
+
 function connect() {
     var socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, onConnected, onError);
 
     alertsArea = document.querySelector('#alerts-area');
-    alertTemplate = document.querySelector('#alert-template')
+    alertTemplate = document.querySelector('#alert-template');
+
+    messageArea = document.querySelector('#messages-area');
+    messageTemplate = document.querySelector('#message-template');
 }
 
 function onConnected() {
@@ -29,17 +35,20 @@ function onError(error) {
 }
 
 function onMessageReceived(message) {
-    var alert = createInfoAlert(message.body);
-    alertsArea.appendChild(alert);
+    var toast = createToast(message.body);
+    messageArea.appendChild(toast);
+    $('#' + toast.getAttribute('id')).toast('show');
 }
 
-function onErrorReceived(message) {
-    var alert = createErrorAlert(message.body);
+function onErrorReceived(incoming_message) {
+    var message = null;
+    if (incoming_message.body === undefined) {
+        message = incoming_message;
+    } else {
+        message = incoming_message.body;
+    }
+    var alert = createErrorAlert(message);
     alertsArea.appendChild(alert);
-}
-
-function createInfoAlert(alert_message) {
-    return createAlert('info', alert_message);
 }
 
 function createErrorAlert(alert_message) {
@@ -56,4 +65,20 @@ function createAlert(alert_class, alert_message) {
 
 function createAlertTextNode(text) {
     return document.createTextNode(text);
+}
+
+function createToast(message_body) {
+    var message = JSON.parse(message_body);
+
+    var toastFragment = document.importNode(messageTemplate.content, true);
+    var toast = toastFragment.firstElementChild;
+    toast.setAttribute('id', message.id);
+
+    var toastTime = toast.getElementsByTagName('small')[0];
+    toastTime.appendChild(document.createTextNode(message.date));
+
+    var toastBody = toast.getElementsByClassName('toast-body')[0];
+    toastBody.appendChild(document.createTextNode(message.text));
+
+    return toast;
 }
