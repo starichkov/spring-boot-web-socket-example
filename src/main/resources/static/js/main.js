@@ -82,3 +82,8 @@ function createToast(message_body) {
 
     return toast;
 }
+
+function sendMessage() {
+    var text = document.getElementById('messageTextInput').value;
+    stompClient.send("/app/ws", {}, text);
+}

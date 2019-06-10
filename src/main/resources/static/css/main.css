@@ -1,0 +1,12 @@
+html, body {
+    height: 100%
+}
+
+.area {
+    margin: 1.5em;
+    flex-grow: 2;
+}
+
+.area .side-area {
+    flex-grow: 1;
+}

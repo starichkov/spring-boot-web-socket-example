@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Title</title>
+    <title>WebSocket Example</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -26,12 +27,36 @@
 
 <script src="/js/main.js"></script>
 
-<div id="alerts-area">
+<div id="outer_container" style="display: flex; flex-direction: row">
 
-</div>
+    <div id="side-bar-area" class="area side-area">
 
-<div id="messages-area">
+    </div>
 
+    <div id="inner_container" style="display: flex; flex-direction: column; flex-grow: 2">
+
+        <div id="send-area" class="area">
+            <form>
+                <div class="form-group">
+                    <label for="messageTextInput">Message text</label>
+                    <input type="text" class="form-control" id="messageTextInput" aria-describedby="messageTextHelp"
+                           placeholder="Enter your message here">
+                    <small id="messageTextHelp" class="form-text text-muted">Message will be send over STOMP using
+                        WebSocket.
+                    </small>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="sendMessage()">Send</button>
+            </form>
+        </div>
+
+        <div id="alerts-area" class="area side-area">
+
+        </div>
+    </div>
+
+    <div id="messages-area" class="area side-area">
+
+    </div>
 </div>
 
 <template id="alert-template">
